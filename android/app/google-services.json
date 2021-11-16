@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "738031394186",
+    "project_id": "chaty-c68f2",
+    "storage_bucket": "chaty-c68f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738031394186:android:d772dd2927291fd6ed3c73",
+        "android_client_info": {
+          "package_name": "com.example.peer_to_peer_chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "738031394186-2cf67voglsia177a6hmc1lm276mki8d9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peer_to_peer_chat_app",
+            "certificate_hash": "2e0acd81439d80974d33c480d6e797d83c85e896"
+          }
+        },
+        {
+          "client_id": "738031394186-aqusp2fnres8eas5o3mf9efl4egfc3mb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsJ6J_uPZhEc2btEdf1rjDTJyTe0AoSGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "738031394186-aqusp2fnres8eas5o3mf9efl4egfc3mb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
