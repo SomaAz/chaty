@@ -1,9 +1,11 @@
-import 'package:chaty/view/auth/login_view.dart';
 import 'package:chaty/view/widgets/custom_text.dart';
+import 'package:chaty/view_model/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpView extends GetWidget {
+class SignUpView extends GetWidget<AuthViewModel> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +35,7 @@ class SignUpView extends GetWidget {
                       ),
                       SizedBox(height: 60),
                       Form(
+                        key: _formKey,
                         child: Column(
                           children: [
                             CustomText("Name",
@@ -41,6 +44,14 @@ class SignUpView extends GetWidget {
                               decoration: InputDecoration(
                                 hintText: "Type your full name",
                               ),
+                              onSaved: (val) {
+                                controller.name = val!.trim();
+                              },
+                              validator: (val) {
+                                if (val == null) {
+                                  return "Please fill this field";
+                                }
+                              },
                             ),
                             SizedBox(height: 25),
                             CustomText("Email",
@@ -49,22 +60,52 @@ class SignUpView extends GetWidget {
                               decoration: InputDecoration(
                                 hintText: "email@example.com",
                               ),
+                              onSaved: (val) {
+                                controller.email = val!.trim();
+                              },
+                              validator: (val) {
+                                if (val == null) {
+                                  return "Please fill this field";
+                                }
+                                if (!val.contains("@")) {
+                                  return "Please type your email correctly";
+                                }
+                              },
                             ),
                             SizedBox(height: 25),
                             CustomText("Password",
                                 fontSize: 18, fontWeight: FontWeight.w500),
-                            TextFormField(
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              decoration: InputDecoration(
-                                hintText: "●●●●●●●●",
-                                suffixIcon: IconButton(
-                                  icon: Icon(Icons.remove_red_eye),
-                                  onPressed: () {},
+                            GetBuilder<AuthViewModel>(builder: (ctr) {
+                              return TextFormField(
+                                obscureText: !ctr.showPassword,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                decoration: InputDecoration(
+                                  hintText: "●●●●●●●●",
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      ctr.showPassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                    ),
+                                    onPressed: () {
+                                      ctr.toggleShowPassword();
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ),
+                                onSaved: (val) {
+                                  controller.password = val!.trim();
+                                },
+                                validator: (val) {
+                                  if (val == null) {
+                                    return "Please fill this field";
+                                  }
+                                  if (val.length < 5) {
+                                    return "Please make your password length 5-24 characters";
+                                  }
+                                },
+                              );
+                            }),
                           ],
                         ),
                       ),
@@ -75,7 +116,12 @@ class SignUpView extends GetWidget {
                   Column(
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _formKey.currentState!.save();
+                          if (_formKey.currentState!.validate()) {
+                            controller.signup();
+                          }
+                        },
                         child: CustomText(
                           "Sign Up",
                           alignment: Alignment.center,
@@ -109,7 +155,8 @@ class SignUpView extends GetWidget {
                               ),
                             ),
                             onPressed: () {
-                              Get.offAll(() => LoginView());
+                              controller.togglePage();
+                              print(controller.page);
                             },
                           ),
                         ],
