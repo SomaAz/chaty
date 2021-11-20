@@ -127,9 +127,9 @@ class LoginView extends GetWidget<AuthViewModel> {
                               borderRadius: BorderRadius.circular(25),
                             ),
                           ),
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.blue[900],
-                          ),
+                          // backgroundColor: MaterialStateProperty.all(
+                          //   Colors.blue[900],
+                          // ),
                         ),
                       ),
                       Row(
@@ -141,7 +141,7 @@ class LoginView extends GetWidget<AuthViewModel> {
                               "Sign up",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue[900],
+                                // color: Colors.blue[900],
                               ),
                             ),
                             onPressed: () {
