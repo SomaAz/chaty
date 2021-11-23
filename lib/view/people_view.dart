@@ -27,6 +27,7 @@ class PeopleView extends GetWidget {
             child: FutureBuilder(
                 future: FirestoreService().getAllUsers(),
                 builder: (context, AsyncSnapshot<List<UserModel>> snapshot) {
+                  print(snapshot.hasData);
                   return snapshot.connectionState == ConnectionState.waiting
                       ? Center(
                           child: CircularProgressIndicator(),
@@ -65,6 +66,31 @@ class PeopleView extends GetWidget {
               //if there is a chat room created between them load it
               //if not create one then load it
 
+              // final thisUserData =
+              //     await FirestoreService().getUserData(ctr.user!.uid);
+
+              // final thisUserModel = UserModel(
+              //   name: thisUserData['name'],
+              //   uid: thisUserData['uid'],
+              //   email: thisUserData['email'],
+              // );
+              // final bool sameUser = thisUserModel.uid == user.uid;
+              // var chatRooms = await FirestoreService().getChatRooms(
+              //   sameUser ? [user] : [user, thisUserModel],
+              // );
+              // if (chatRooms.isEmpty) {
+              //   print("Creating ChatRoom...");
+              //   FirestoreService().createChatRoom([
+              //     user,
+              //     thisUserModel,
+              //   ]);
+              //   chatRooms = await FirestoreService().getChatRooms(
+              //     sameUser ? [user] : [user, thisUserModel],
+              //   );
+              // }
+
+              // print(chatRooms.map((e) => e.data()));
+              // Get.to(() => ChatView(chatRooms.first.id));
               final thisUserData =
                   await FirestoreService().getUserData(ctr.user!.uid);
 
@@ -73,23 +99,7 @@ class PeopleView extends GetWidget {
                 uid: thisUserData['uid'],
                 email: thisUserData['email'],
               );
-              final bool sameUser = thisUserModel.uid == user.uid;
-              var chatRooms = await FirestoreService().getChatRooms(
-                sameUser ? [user] : [user, thisUserModel],
-              );
-              if (chatRooms.isEmpty) {
-                print("Creating ChatRoom...");
-                FirestoreService().createChatRoom([
-                  user,
-                  thisUserModel,
-                ]);
-                chatRooms = await FirestoreService().getChatRooms(
-                  sameUser ? [user] : [user, thisUserModel],
-                );
-              }
-
-              print(chatRooms.map((e) => e.data()));
-              Get.to(() => ChatView(chatRooms.first.id));
+              Get.to(() => ChatView(thisUserModel, user));
             },
             borderRadius: BorderRadius.circular(60),
             child: ClipRRect(

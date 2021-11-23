@@ -30,6 +30,10 @@ class HomeView extends GetWidget<HomeViewModel> {
               icon: Icon(Icons.chat),
               label: "",
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: "",
+            ),
           ],
         ),
       );

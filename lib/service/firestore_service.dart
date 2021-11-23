@@ -19,6 +19,7 @@ class FirestoreService {
 
   Future<List<UserModel>> getAllUsers() async {
     QuerySnapshot querySnapshot = await _firestore.collection("users").get();
+
     List<UserModel> list = querySnapshot.docs
         .map(
           (doc) => UserModel(
@@ -39,10 +40,12 @@ class FirestoreService {
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getChatRooms(
       List<UserModel> users) async {
     final snapshot = await _firestore.collection("chatRooms").get();
-    return snapshot.docs.where(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> chatRooms =
+        snapshot.docs.where(
       (doc) {
         final List<dynamic> docUsersUids = doc.data()["users"] as List<dynamic>;
         final List<String> usersUids = users.map((e) => e.uid).toList();
+
         if (users.length == 1) {
           for (String docUsersUid in docUsersUids) {
             if (docUsersUid != usersUids.first) {
@@ -50,6 +53,7 @@ class FirestoreService {
             }
           }
         }
+
         if (usersUids.every((uid) => docUsersUids.contains(uid))) {
           return true;
         } else {
@@ -57,12 +61,41 @@ class FirestoreService {
         }
       },
     ).toList();
+    return chatRooms;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomMessages(
+      String chatRoomId) {
+    return _firestore
+        .collection("chatRooms")
+        .doc(chatRoomId)
+        .collection("messages")
+        .orderBy("timeSent", descending: false)
+        .snapshots();
   }
 
   void createChatRoom(List<UserModel> users) async {
-    await _firestore.collection("chatRooms").add({
+    final DocumentReference<Map<String, dynamic>> doc =
+        _firestore.collection("chatRooms").doc();
+    await doc.set({
+      "chatRoomId": doc.id,
       "timeCreated": Timestamp.now(),
       "users": users.map((e) => e.uid).toList(),
+    });
+  }
+
+  Future<void> sendMessage(
+      {required String sender,
+      required String chatRoomId,
+      required String text}) async {
+    _firestore
+        .collection("chatRooms")
+        .doc(chatRoomId)
+        .collection("messages")
+        .add({
+      "sender": sender,
+      "text": text,
+      "timeSent": Timestamp.now(),
     });
   }
 }

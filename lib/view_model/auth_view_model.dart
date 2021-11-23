@@ -18,9 +18,11 @@ class AuthViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print("onInit:AuthViewModel");
     _user.bindStream(_firebaseAuth.authStateChanges());
   }
 
+  //hello123
   void signup() async {
     try {
       await _firebaseAuth
